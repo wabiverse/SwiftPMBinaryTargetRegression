@@ -2,6 +2,9 @@
 
 ### To reproduce
 
+> [!NOTE]
+> This does not apply to the SwiftPM **release**, this regression only exists in the `main` branch of SwiftPM.
+
 ```swift
 git clone git@github.com:wabiverse/SwiftPMBinaryTargetRegression.git
 cd SwiftPMBinaryTargetRegression
