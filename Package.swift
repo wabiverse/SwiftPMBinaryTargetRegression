@@ -10,19 +10,25 @@ let package = Package(
     .tvOS(.v14),
     .watchOS(.v9),
   ],
-  dependencies: Arch.getPackageDeps(),
+  dependencies: [
+    .package(url: "https://github.com/wabiverse/MetaversePythonFramework", from: "3.11.7")
+  ],
   targets: [
 
     .target(
       name: "TestMeSwift",
-      dependencies: Arch.add(dependency: .python)
+      dependencies: [
+        .product(name: "Python", package: "MetaversePythonFramework")
+      ]
     ),
 
     // 1. comment this c++ target out, otherwise swiftpm cannot resolve the binary target.
     // https://github.com/swiftlang/swift-package-manager/pull/8056
     .target(
       name: "TestMe",
-      dependencies: Arch.add(dependency: .python)
+      dependencies: [
+        .product(name: "Python", package: "MetaversePythonFramework")
+      ]
     ),
     // ----------------------------------------------
 
@@ -39,48 +45,5 @@ let package = Package(
         .interoperabilityMode(.Cxx)
       ]
     ),
-  ] + Arch.add(system: .python)
+  ]
 )
-
-enum Arch {
-  enum Dependency {
-    case python
-  }
-
-  public static func add(dependency: Dependency) -> [Target.Dependency] {
-    switch dependency
-    {
-    case .python:
-      #if os(macOS) || os(visionOS) || os(iOS) || os(tvOS) || os(watchOS)
-        [.product(name: "Python", package: "MetaversePythonFramework")]
-      #else
-        [.target(name: "Python")]
-      #endif
-    }
-  }
-
-  public static func getPackageDeps() -> [Package.Dependency] {
-    #if os(macOS) || os(visionOS) || os(iOS) || os(tvOS) || os(watchOS)
-      [.package(url: "https://github.com/wabiverse/MetaversePythonFramework", from: "3.11.7")]
-    #else
-      []
-    #endif
-  }
-
-  public static func add(system: Dependency) -> [Target] {
-    #if os(macOS) || os(visionOS) || os(iOS) || os(tvOS) || os(watchOS)
-      []
-    #else
-      [
-        .systemLibrary(
-          name: "Python",
-          pkgConfig: "python3",
-          providers: [
-            .apt(["python3-dev"]),
-            .yum(["python3-devel"]),
-          ]
-        )
-      ]
-    #endif
-  }
-}
