@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:TestMe}",
+      "name": "Debug TestMeApp",
+      "program": "${workspaceFolder:TestMe}/.build/debug/TestMeApp",
+      "preLaunchTask": "swift: Build Debug TestMeApp"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:TestMe}",
+      "name": "Release TestMeApp",
+      "program": "${workspaceFolder:TestMe}/.build/release/TestMeApp",
+      "preLaunchTask": "swift: Build Release TestMeApp"
+    }
+  ]
+}
